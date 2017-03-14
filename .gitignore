@@ -149,4 +149,3 @@ pip-selfcheck.json
 .gitignore
 .idea/
 tfl05/__pycache__/
-/hvass/tf_logs/
