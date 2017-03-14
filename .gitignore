@@ -145,8 +145,8 @@ fabric.properties
 [Ss]cripts
 pyvenv.cfg
 pip-selfcheck.json
-hvass/venv/
-venv/
+/hvass/venv/
 .gitignore
 .idea/
 tfl05/__pycache__/
+/hvass/tf_logs/
