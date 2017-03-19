@@ -149,3 +149,7 @@ pip-selfcheck.json
 .gitignore
 .idea/
 tfl05/__pycache__/
+/hvass/inception/
+/.gitignore
+/hvass/MNIST_data/
+/hvass/data/

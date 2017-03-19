@@ -48,7 +48,7 @@ num_classes = 10
 
 x = tf.placeholder(tf.float32, shape=[None, img_size_flat], name='x')
 x_image = tf.reshape(x, [-1, img_size, img_size, num_channels])
-y_true = tf.placeholder(tf.float32, shape=[None, 10], name='y_true')
+y_true = tf.placeholder(tf.float32, shape=[None, num_classes], name='y_true')
 y_true_cls = tf.argmax(y_true, dimension=1)
 
 x_pretty = pt.wrap(x_image)
@@ -69,13 +69,11 @@ cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=y_pred,
                                                         labels=y_true, name='cross_entropy')
 
 cost = tf.reduce_mean(cross_entropy, name='cost')
-tf.summary.scalar('cost', cost)
 
 optimizer = tf.train.AdamOptimizer(learning_rate=1e-4).minimize(cost)
 
 correct_prediction = tf.equal(y_pred_cls, y_true_cls)
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
-tf.summary.scalar('accuracy', accuracy)
 
 train_batch_size = 50
 
