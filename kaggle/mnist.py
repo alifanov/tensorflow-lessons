@@ -102,6 +102,8 @@ def optimize(X, Y, iterations=100):
             print('Iteration: {0} | Validation accuracy: {1:.4%}'.format(i, acc))
 
 
+BATCH_SIZE = 200
+
 with tf.Session() as session:
     session.run(tf.global_variables_initializer())
     optimize(images, labels, iterations=200)
@@ -110,7 +112,11 @@ with tf.Session() as session:
     test_images = test_images.astype(np.float)
     test_images = np.multiply(test_images, 1.0 / 255.0)
 
-    predicted_labels = session.run(y_pred_cls, feed_dict={x: test_images})
+    predicted_labels = np.zeros(test_images.shape[0])
+    for i in range(0, test_images.shape[0] // BATCH_SIZE):
+        predicted_labels[i * BATCH_SIZE: (i + 1) * BATCH_SIZE] = y_pred_cls.eval(
+            feed_dict={x: test_images[i * BATCH_SIZE: (i + 1) * BATCH_SIZE]})
+    # predicted_labels = session.run(y_pred_cls, feed_dict={x: test_images})
 
     np.savetxt('submission.csv',
                np.c_[range(1, len(test_images) + 1), predicted_labels],
