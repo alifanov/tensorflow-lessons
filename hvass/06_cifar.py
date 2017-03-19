@@ -200,4 +200,4 @@ with tf.Session() as session:
     session.run(tf.global_variables_initializer())
     optimize(1000)
     correct, _ = predict_cls(images_test, labels_test, cls_test)
-    print('Accuracy {0:.4}%'.format(correct.mean()))
+    print('Accuracy {0:.4%}'.format(correct.mean()))
