@@ -153,3 +153,5 @@ tfl05/__pycache__/
 /.gitignore
 /hvass/MNIST_data/
 /hvass/data/
+/kaggle/venv/
+/venv/
