@@ -14,6 +14,8 @@ from sklearn.model_selection import GridSearchCV
 from keras.layers import Dense, Dropout, Activation
 from keras.models import Sequential
 from keras.optimizers import SGD, Adam
+from keras.constraints import maxnorm
+
 from matplotlib import pyplot
 
 TARGET_COLUMN = 'SalePrice'
@@ -62,9 +64,9 @@ def create_model(
 ):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation=activation, init=init_mode))
+    model.add(Dense(n_input, input_dim=n_input, activation=activation, init=init_mode, W_constraint=maxnorm(weight_constraint)))
     model.add(Dropout(dropout_rate))
-    model.add(Dense(64, activation=activation, init=init_mode))
+    model.add(Dense(64, activation=activation, init=init_mode, W_constraint=maxnorm(weight_constraint)))
     model.add(Dropout(dropout_rate))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
