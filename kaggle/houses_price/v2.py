@@ -53,11 +53,11 @@ def prepare_data():
     return X, y, X_test
 
 
-def create_model(n_input, init_mode='normal'):
+def create_model(n_input, init_mode='lecun_uniform', activation='relu'):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation='relu', init=init_mode))
-    model.add(Dense(64, activation='relu', init=init_mode))
+    model.add(Dense(n_input, input_dim=n_input, activation=activation, init=init_mode))
+    model.add(Dense(64, activation=activation, init=init_mode))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
     # model.add(Dense(128, activation='relu'))
@@ -96,7 +96,7 @@ n_input = X.shape[1]
 # GridSearchCV
 model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
 param_grid = {
-    'init_mode': ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
+    'activation': ['softmax', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'linear']
 }
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
 grid_result = grid.fit(X, y)
