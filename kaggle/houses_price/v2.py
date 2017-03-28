@@ -53,11 +53,19 @@ def prepare_data():
     return X, y, X_test
 
 
-def create_model(n_input, init_mode='lecun_uniform', activation='relu'):
+def create_model(
+        n_input,
+        init_mode='lecun_uniform',
+        activation='softplus',
+        dropout_rate=0.0,
+        weight_constraint=0
+):
     model = Sequential()
 
     model.add(Dense(n_input, input_dim=n_input, activation=activation, init=init_mode))
+    model.add(Dropout(dropout_rate))
     model.add(Dense(64, activation=activation, init=init_mode))
+    model.add(Dropout(dropout_rate))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
     # model.add(Dense(128, activation='relu'))
@@ -96,7 +104,8 @@ n_input = X.shape[1]
 # GridSearchCV
 model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
 param_grid = {
-    'activation': ['softmax', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'linear']
+    'weight_constraint': [1, 2, 3, 4, 5],
+    'dropout_rate ': [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 }
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
 grid_result = grid.fit(X, y)
