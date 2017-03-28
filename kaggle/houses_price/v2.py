@@ -96,7 +96,7 @@ X_train, _, y_train, y_test = cross_validation.train_test_split(
 nb_epoch = 10000
 # model = create_model(n_epochs)
 np.random.seed(3)
-model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=nb_epoch, batch_size=50, verbose=0)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=nb_epoch, batch_size=50, verbose=1)
 model.fit(X, y)
 
 # GridSearchCV
