@@ -84,7 +84,7 @@ x_scaler = preprocessing.MinMaxScaler()
 y_scaler = preprocessing.MinMaxScaler()
 
 X_scaled = x_scaler.fit_transform(X)
-y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
+y_scaled = y_scaler.fit_transform(y)
 
 X_train = X_scaled
 y_train = y_scaled
