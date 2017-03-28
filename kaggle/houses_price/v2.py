@@ -119,7 +119,7 @@ seed = 7
 np.random.seed(seed)
 estimators = []
 estimators.append(('standardize', StandardScaler()))
-estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)))
+estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=1)))
 pipeline = Pipeline(estimators)
 #
 kfold = KFold(n_splits=10, random_state=seed)
