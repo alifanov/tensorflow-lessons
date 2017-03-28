@@ -56,8 +56,8 @@ def prepare_data():
 def create_model(n_input, init_mode='normal'):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation='relu', init_mode=init_mode))
-    model.add(Dense(64, activation='relu', init_mode=init_mode))
+    model.add(Dense(n_input, input_dim=n_input, activation='relu', init=init_mode))
+    model.add(Dense(64, activation='relu', init=init_mode))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
     # model.add(Dense(128, activation='relu'))
