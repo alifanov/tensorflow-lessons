@@ -68,7 +68,7 @@ def create_model(
     # model.add(Dense(128, activation='relu'))
     model.add(Dense(1))
 
-    learning_rate = 1e-1
+    learning_rate = 1e-2
     decay = 1e-3
 
     model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
@@ -119,7 +119,7 @@ seed = 7
 np.random.seed(seed)
 estimators = []
 estimators.append(('standardize', StandardScaler()))
-estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=1)))
+estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=10000, batch_size=50, verbose=1)))
 pipeline = Pipeline(estimators)
 #
 kfold = KFold(n_splits=10, random_state=seed)
