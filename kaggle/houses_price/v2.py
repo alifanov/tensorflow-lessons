@@ -79,24 +79,25 @@ X, y, X_test = prepare_data()
 
 n_input = X.shape[1]
 
-# x_scaler = preprocessing.MinMaxScaler()
-# y_scaler = preprocessing.MinMaxScaler()
+x_scaler = preprocessing.MinMaxScaler()
+y_scaler = preprocessing.MinMaxScaler()
+
+X_scaled = x_scaler.fit_transform(X)
+y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
 #
-# X_scaled = x_scaler.fit_transform(X)
-# y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
-
-# X_train, X_test, y_train, y_test = cross_validation.train_test_split(
-#     X_scaled, y_scaled, test_size=0.1, random_state=3)
-
+X_train, _, y_train, y_test = cross_validation.train_test_split(
+    X_scaled, y_scaled, test_size=0.0, random_state=3)
+#
 # print('X_train: {}'.format(X_train.shape))
 # print('X_test: {}'.format(X_test.shape))
 # print('y_train: {}'.format(y_train.shape))
 # print('y_test: {}'.format(y_test.shape))
 
-# n_epochs = 100
+nb_epoch = 10000
 # model = create_model(n_epochs)
-# np.random.seed(3)
-# model.fit(X, y, epochs=n_epochs, batch_size=10, verbose=1)
+np.random.seed(3)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=nb_epoch, batch_size=50, verbose=0)
+model.fit(X, y)
 
 # GridSearchCV
 # model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
@@ -115,17 +116,18 @@ n_input = X.shape[1]
 # for mean, stdev, param in zip(means, stds, params):
 #     print("%f (%f) with: %r" % (mean, stdev, param))
 
-seed = 7
-np.random.seed(seed)
-estimators = []
-estimators.append(('standardize', StandardScaler()))
-estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=10000, batch_size=50, verbose=1)))
-pipeline = Pipeline(estimators)
-#
-kfold = KFold(n_splits=10, random_state=seed)
-results = cross_val_score(pipeline, X, y, cv=kfold)
-print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
-#
+# cross validation
+# seed = 7
+# np.random.seed(seed)
+# estimators = []
+# estimators.append(('standardize', StandardScaler()))
+# estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=10000, batch_size=50, verbose=1)))
+# pipeline = Pipeline(estimators)
+
+# kfold = KFold(n_splits=10, random_state=seed)
+# results = cross_val_score(pipeline, X, y, cv=kfold)
+# print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
+
 # predicted = model.predict(X_test)
 
 # pyplot.plot(y_scaler.inverse_transform(predicted), color="blue")
