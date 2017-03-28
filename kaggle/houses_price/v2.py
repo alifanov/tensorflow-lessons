@@ -46,7 +46,7 @@ def prepare_data():
     data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
 
     X = data.iloc[:, 1:80]
-    y = data.iloc[:, 80]
+    y = data.iloc[:, 80].reshape(-1, 1)
     X_test = data_test.iloc[:, 1:]
     # X = data.drop(TARGET_COLUMN, 1)
     # X = X.drop('Id', 1).as_matrix()
