@@ -99,3 +99,6 @@ for id in (data_test['Id']):
     str = str + '\n'
     file.write(str)
     i += 1
+
+# for id,y in zip(data_test['id'], y_pred):
+#     file.write('{},{}\n'.format(id, y[0]))
