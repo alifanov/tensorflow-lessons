@@ -145,5 +145,7 @@ y_pred = y_scaler.inverse_transform(y_pred)
 file = open('submission.csv', 'w')
 header = "Id,SalePrice\n"
 file.write(header)
+print(data_test['Id'])
+print(y_pred)
 for id, y in zip(data_test['Id'], y_pred.reshape(-1, 1)):
     file.write('{},{}\n'.format(id, y))
