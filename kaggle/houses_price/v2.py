@@ -53,18 +53,18 @@ def prepare_data():
     return X, y, X_test
 
 
-def create_model(n_input, n_epochs=1000, optimizer='Adam', learning_rate=1e-4, decay=1e-6):
+def create_model(n_input, init_mode='normal'):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation='relu'))
-    model.add(Dense(64, activation='relu'))
+    model.add(Dense(n_input, input_dim=n_input, activation='relu', init_mode=init_mode))
+    model.add(Dense(64, activation='relu', init_mode=init_mode))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
     # model.add(Dense(128, activation='relu'))
     model.add(Dense(1))
 
-    # learning_rate = 1e-4
-    # decay = learning_rate / n_epochs
+    learning_rate = 1e-1
+    decay = 1e-3
 
     model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
     return model
@@ -96,8 +96,7 @@ n_input = X.shape[1]
 # GridSearchCV
 model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
 param_grid = {
-    'learning_rate': [1e-4, 0.001, 0.01, 0.1, 0.2, 0.3],
-    'decay': [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]
+    'init_mode': ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
 }
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
 grid_result = grid.fit(X, y)
