@@ -14,8 +14,6 @@ from sklearn.model_selection import GridSearchCV
 from keras.layers import Dense, Dropout, Activation
 from keras.models import Sequential
 from keras.optimizers import SGD, Adam
-from keras.constraints import maxnorm
-
 from matplotlib import pyplot
 
 TARGET_COLUMN = 'SalePrice'
@@ -59,15 +57,12 @@ def create_model(
         n_input,
         init_mode='lecun_uniform',
         activation='softplus',
-        dropout_rate=0.0,
-        weight_constraint=0
+        n_hidden=100
 ):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation=activation, init=init_mode, W_constraint=maxnorm(weight_constraint)))
-    model.add(Dropout(dropout_rate))
-    model.add(Dense(64, activation=activation, init=init_mode, W_constraint=maxnorm(weight_constraint)))
-    model.add(Dropout(dropout_rate))
+    model.add(Dense(n_hidden
+    model.add(Dense(64, activation=activation, init=init_mode))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
     # model.add(Dense(128, activation='relu'))
@@ -106,8 +101,7 @@ n_input = X.shape[1]
 # GridSearchCV
 model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
 param_grid = {
-    'weight_constraint': [1, 2, 3, 4, 5],
-    'dropout_rate ': [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    'n_hidden': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
 }
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
 grid_result = grid.fit(X, y)
