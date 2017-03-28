@@ -43,12 +43,15 @@ def prepare_data():
         data[col] = encode.fit_transform(data[col])
         data_test[col] = encode.fit_transform(data_test[col])
 
-    data[TARGET_COLUMN].fillna(0, inplace=True)
+    data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
 
-    X = data.drop(TARGET_COLUMN, 1)
-    X = X.drop('Id', 1).as_matrix()
-    y = data[TARGET_COLUMN].as_matrix()
-    X_test = data_test.drop('Id', 1).as_matrix()
+    X = data.iloc[:, 1:80]
+    y = data.iloc[:, 80]
+    X_test = data_test.iloc[:, 0]
+    # X = data.drop(TARGET_COLUMN, 1)
+    # X = X.drop('Id', 1).as_matrix()
+    # y = data[TARGET_COLUMN].as_matrix()
+    # X_test = data_test.drop('Id', 1).as_matrix()
 
     return X, y, X_test
 
@@ -92,7 +95,8 @@ y_train = y_scaled
 # print('y_train: {}'.format(y_train.shape))
 # print('y_test: {}'.format(y_test.shape))
 
-nb_epoch = 1000
+nb_epoch = 100
+print('N input: {}'.format(n_input))
 # model = create_model(n_epochs)
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=10, verbose=1)
