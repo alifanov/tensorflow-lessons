@@ -146,5 +146,4 @@ file = open('submission.csv', 'w')
 header = "Id,SalePrice\n"
 file.write(header)
 for id, y in zip(data_test['Id'], y_pred):
-    print(id, y)
-    file.write('{},{}\n'.format(id, y[0]))
+    file.write('{},{}\n'.format(id, y))
