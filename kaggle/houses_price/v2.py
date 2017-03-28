@@ -61,7 +61,7 @@ def create_model(
 ):
     model = Sequential()
 
-    model.add(Dense(n_hidden, input_dim=n_input, activation=activation, init=init_mode))
+    model.add(Dense(n_hidden, input_dim=n_input, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(64, activation=activation, kernel_initializer=init_mode))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
