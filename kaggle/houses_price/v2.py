@@ -57,12 +57,12 @@ def create_model(
         n_input,
         init_mode='lecun_uniform',
         activation='softplus',
-        n_hidden=100
+        n_hidden=10
 ):
     model = Sequential()
 
     model.add(Dense(n_hidden, input_dim=n_input, activation=activation, init=init_mode))
-    # model.add(Dense(64, activation=activation, init=init_mode))
+    model.add(Dense(64, activation=activation, kernel_initializer=init_mode))
     # model.add(Dense(512, activation='relu'))
     # model.add(Dense(256, activation='relu'))
     # model.add(Dense(128, activation='relu'))
@@ -99,33 +99,33 @@ n_input = X.shape[1]
 # model.fit(X, y, epochs=n_epochs, batch_size=10, verbose=1)
 
 # GridSearchCV
-model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
-param_grid = {
-    'n_hidden': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]
-}
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
-grid_result = grid.fit(X, y)
-
-print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
-
-means = grid_result.cv_results_['mean_test_score']
-stds = grid_result.cv_results_['std_test_score']
-params = grid_result.cv_results_['params']
-
-for mean, stdev, param in zip(means, stds, params):
-    print("%f (%f) with: %r" % (mean, stdev, param))
-
-# seed = 7
-# np.random.seed(seed)
-# estimators = []
-# estimators.append(('standardize', StandardScaler()))
-# estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, n_epochs=100, batch_size=5, verbose=0)))
-# pipeline = Pipeline(estimators)
+# model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
+# param_grid = {
 #
-# kfold = KFold(n_splits=3, random_state=seed)
-# results = cross_val_score(pipeline, X, y, cv=kfold)
-# print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
+# }
+# grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
+# grid_result = grid.fit(X, y)
 
+# print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
+#
+# means = grid_result.cv_results_['mean_test_score']
+# stds = grid_result.cv_results_['std_test_score']
+# params = grid_result.cv_results_['params']
+#
+# for mean, stdev, param in zip(means, stds, params):
+#     print("%f (%f) with: %r" % (mean, stdev, param))
+
+seed = 7
+np.random.seed(seed)
+estimators = []
+estimators.append(('standardize', StandardScaler()))
+estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, n_epochs=1000, batch_size=50, verbose=0)))
+pipeline = Pipeline(estimators)
+#
+kfold = KFold(n_splits=10, random_state=seed)
+results = cross_val_score(pipeline, X, y, cv=kfold)
+print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
+#
 # predicted = model.predict(X_test)
 
 # pyplot.plot(y_scaler.inverse_transform(predicted), color="blue")
