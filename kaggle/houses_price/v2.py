@@ -78,9 +78,9 @@ def create_model(
 
 X, y, X_test = prepare_data()
 
-print('X shape: {}'.format(X))
-print('y shape: {}'.format(y))
-print('X_test shape: {}'.format(X_test))
+print('X shape: {}'.format(X.shape))
+print('y shape: {}'.format(y.shape))
+print('X_test shape: {}'.format(X_test.shape))
 n_input = X.shape[1]
 
 x_scaler = preprocessing.MinMaxScaler()
