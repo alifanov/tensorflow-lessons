@@ -82,10 +82,11 @@ y_scaler = preprocessing.MinMaxScaler()
 
 X_scaled = x_scaler.fit_transform(X)
 y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
-#
-X_train, _, y_train, y_test = cross_validation.train_test_split(
-    X_scaled, y_scaled, test_size=0.0, random_state=3)
-#
+
+X_train = X_scaled
+y_train = y_scaled
+
+
 # print('X_train: {}'.format(X_train.shape))
 # print('X_test: {}'.format(X_test.shape))
 # print('y_train: {}'.format(y_train.shape))
@@ -134,15 +135,15 @@ model.fit(X, y)
 
 
 
-# X_test_scaled = x_scaler.fit_transform(X_test)
+X_test_scaled = x_scaler.fit_transform(X_test)
 # print(X_test_scaled.shape)
 #
-# y_pred = model.predict(X_test_scaled)
-# y_pred = y_scaler.inverse_transform(y_pred)
+y_pred = model.predict(X_test_scaled)
+y_pred = y_scaler.inverse_transform(y_pred)
 # print(y_pred.shape)
 
-# file = open('submission.csv', 'w')
-# header = "Id,SalePrice\n"
-# file.write(header)
-# for id, y in zip(data_test['Id'], y_pred):
-#     file.write('{},{}\n'.format(id, y[0]))
+file = open('submission.csv', 'w')
+header = "Id,SalePrice\n"
+file.write(header)
+for id, y in zip(data_test['Id'], y_pred):
+    file.write('{},{}\n'.format(id, y[0]))
