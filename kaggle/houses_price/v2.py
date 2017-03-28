@@ -53,7 +53,7 @@ def prepare_data():
     return X, y, X_test
 
 
-def create_model(n_input, n_epochs=1000, optimizer='Adam'):
+def create_model(n_input, n_epochs=1000, optimizer='Adam', learning_rate=1e-4, decay=1e-6):
     model = Sequential()
 
     model.add(Dense(n_input, input_dim=n_input, activation='relu'))
@@ -66,7 +66,7 @@ def create_model(n_input, n_epochs=1000, optimizer='Adam'):
     # learning_rate = 1e-4
     # decay = learning_rate / n_epochs
 
-    model.compile(loss='mse', optimizer=optimizer)
+    model.compile(loss='mse', optimizer=Adam(learning_rate=learning_rate, decay=decay))
     return model
 
 
@@ -94,9 +94,10 @@ n_input = X.shape[1]
 # model.fit(X, y, epochs=n_epochs, batch_size=10, verbose=1)
 
 # GridSearchCV
-model = KerasRegressor(build_fn=create_model, n_input=n_input, batch_size=100, verbose=0)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
 param_grid = {
-    'n_epochs': [50, 100, 200, 500, 1000, 5000, 10000]
+    'learning_rate': [1e-4, 0.001, 0.01, 0.1, 0.2, 0.3],
+    'decay': [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]
 }
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
 grid_result = grid.fit(X, y)
