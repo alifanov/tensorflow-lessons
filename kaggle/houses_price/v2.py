@@ -55,17 +55,15 @@ def prepare_data():
 
 def create_model(
         n_input,
-        init_mode='lecun_uniform',
-        activation='softplus',
-        n_hidden=10
+        init_mode='uniform',
+        activation='sigmoid'
 ):
     model = Sequential()
 
-    model.add(Dense(1024, input_dim=n_input, activation=activation, kernel_initializer=init_mode))
+    model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(512, activation=activation, kernel_initializer=init_mode))
-    # model.add(Dense(512, activation='relu'))
-    # model.add(Dense(256, activation='relu'))
-    # model.add(Dense(128, activation='relu'))
+    model.add(Dense(256, activation=activation, kernel_initializer=init_mode))
+    model.add(Dense(128, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(1))
 
     learning_rate = 1e-2
@@ -93,10 +91,10 @@ X_train, _, y_train, y_test = cross_validation.train_test_split(
 # print('y_train: {}'.format(y_train.shape))
 # print('y_test: {}'.format(y_test.shape))
 
-nb_epoch = 10000
+nb_epoch = 1000
 # model = create_model(n_epochs)
 np.random.seed(3)
-model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=50, verbose=1)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=10, verbose=1)
 model.fit(X, y)
 
 # GridSearchCV
