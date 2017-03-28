@@ -47,7 +47,7 @@ def prepare_data():
 
     X = data.iloc[:, 1:80]
     y = data.iloc[:, 80]
-    X_test = data_test.iloc[:, 0]
+    X_test = data_test.iloc[:, 1:]
     # X = data.drop(TARGET_COLUMN, 1)
     # X = X.drop('Id', 1).as_matrix()
     # y = data[TARGET_COLUMN].as_matrix()
@@ -59,14 +59,14 @@ def prepare_data():
 def create_model(
         n_input,
         init_mode='uniform',
-        activation='sigmoid'
+        activation='relu'
 ):
     model = Sequential()
 
     model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer=init_mode))
-    model.add(Dense(512, activation=activation, kernel_initializer=init_mode))
-    model.add(Dense(256, activation=activation, kernel_initializer=init_mode))
-    model.add(Dense(128, activation=activation, kernel_initializer=init_mode))
+    # model.add(Dense(512, activation=activation, kernel_initializer=init_mode))
+    # model.add(Dense(256, activation=activation, kernel_initializer=init_mode))
+    # model.add(Dense(128, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(1))
 
     learning_rate = 1
@@ -84,7 +84,7 @@ x_scaler = preprocessing.MinMaxScaler()
 y_scaler = preprocessing.MinMaxScaler()
 
 X_scaled = x_scaler.fit_transform(X)
-y_scaled = y_scaler.fit_transform(y)
+y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
 
 X_train = X_scaled
 y_train = y_scaled
