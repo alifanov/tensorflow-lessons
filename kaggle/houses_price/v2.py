@@ -66,7 +66,7 @@ def create_model(n_input, n_epochs=1000, optimizer='Adam', learning_rate=1e-4, d
     # learning_rate = 1e-4
     # decay = learning_rate / n_epochs
 
-    model.compile(loss='mse', optimizer=Adam(learning_rate=learning_rate, decay=decay))
+    model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
     return model
 
 
