@@ -92,7 +92,7 @@ y_train = y_scaled
 # print('y_train: {}'.format(y_train.shape))
 # print('y_test: {}'.format(y_test.shape))
 
-nb_epoch = 100
+nb_epoch = 1000
 # model = create_model(n_epochs)
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=10, verbose=1)
