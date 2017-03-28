@@ -68,8 +68,8 @@ def create_model(
     # model.add(Dense(128, activation='relu'))
     model.add(Dense(1))
 
-    learning_rate = 1e-4
-    decay = 1e-6
+    learning_rate = 1e-2
+    decay = 1e-3
 
     model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
     return model
