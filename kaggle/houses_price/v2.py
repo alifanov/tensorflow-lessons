@@ -94,7 +94,7 @@ n_input = X.shape[1]
 # model.fit(X, y, epochs=n_epochs, batch_size=10, verbose=1)
 
 # GridSearchCV
-model = KerasRegressor(build_fn=create_model, n_input=n_input, n_epochs=100, batch_size=5, verbose=0)
+model = KerasRegressor(build_fn=create_model, verbose=0)
 param_grid = {
     'n_epochs': [50, 100, 200, 500],
     'batch_size': [50, 75, 100],
