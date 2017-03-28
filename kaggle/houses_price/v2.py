@@ -66,7 +66,7 @@ def create_model(
     model.add(Dense(128, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(1))
 
-    learning_rate = 1
+    learning_rate = 10
     decay = learning_rate / 1000
 
     model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
