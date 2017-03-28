@@ -78,6 +78,9 @@ def create_model(
 
 X, y, X_test = prepare_data()
 
+print('X shape: {}'.format(X))
+print('y shape: {}'.format(y))
+print('X_test shape: {}'.format(X_test))
 n_input = X.shape[1]
 
 x_scaler = preprocessing.MinMaxScaler()
@@ -96,7 +99,6 @@ y_train = y_scaled
 # print('y_test: {}'.format(y_test.shape))
 
 nb_epoch = 100
-print('N input: {}'.format(n_input))
 # model = create_model(n_epochs)
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=10, verbose=1)
