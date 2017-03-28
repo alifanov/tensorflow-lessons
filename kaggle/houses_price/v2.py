@@ -98,7 +98,7 @@ model = KerasRegressor(build_fn=create_model, n_input=n_input, batch_size=100, v
 param_grid = {
     'n_epochs': [50, 100, 200, 500, 1000, 5000]
 }
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='mean_squared_error')
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
 grid_result = grid.fit(X, y)
 
 print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
