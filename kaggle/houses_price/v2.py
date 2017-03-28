@@ -66,12 +66,12 @@ model.add(Dense(256, activation='relu'))
 model.add(Dense(1))
 
 learning_rate = 1e-4
-n_epochs = 100
+n_epochs = 1000
 decay = learning_rate / n_epochs
 
 model.compile(loss='mse', optimizer=Adam(lr=learning_rate), metrics=['accuracy'], decay=decay)
 np.random.seed(3)
-model.fit(X_train, y_train, epochs=1000, batch_size=5, verbose=1)
+model.fit(X_train, y_train, epochs=n_epochs, batch_size=10, verbose=1)
 
 # predicted = model.predict(X_test)
 
