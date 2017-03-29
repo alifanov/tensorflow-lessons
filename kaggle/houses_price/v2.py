@@ -67,10 +67,10 @@ y_train = y
 
 n_input = X.shape[1]
 
-x_scaler = preprocessing.MinMaxScaler()
-X_scaled = x_scaler.fit_transform(X)
-X_test = x_scaler.fit_transform(X_test)
-X_train = X_scaled
+# x_scaler = preprocessing.MinMaxScaler()
+# X_scaled = x_scaler.fit_transform(X)
+# X_test = x_scaler.fit_transform(X_test)
+# X_train = X_scaled
 
 
 nb_epoch = 500
