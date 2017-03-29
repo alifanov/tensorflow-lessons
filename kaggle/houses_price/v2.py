@@ -1,20 +1,13 @@
+import csv
 import pandas as pd
 import numpy as np
 import seaborn as sns
 
 from sklearn import preprocessing
-from sklearn import cross_validation
 from keras.wrappers.scikit_learn import KerasRegressor
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-
-from keras.layers import Dense, Dropout, Activation
+from keras.layers import Dense
 from keras.models import Sequential
-from keras.optimizers import SGD, Adam
-from matplotlib import pyplot
+from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
 
@@ -25,10 +18,8 @@ def prepare_data():
     data = pd.read_csv('./train.csv')
 
     categorical_fields = data.select_dtypes(exclude=[np.number]).columns
-    # print(categorical_fields)
 
     num_fields = data.select_dtypes(include=[np.number]).drop(TARGET_COLUMN, 1).columns
-    # print(num_fields)
 
     for col in categorical_fields:
         data[col].fillna('default', inplace=True)
@@ -48,10 +39,6 @@ def prepare_data():
     X = data.values[:, 1:80]
     y = data.values[:, 80]
     X_test = data_test.values[:, 1:]
-    # X = data.drop(TARGET_COLUMN, 1)
-    # X = X.drop('Id', 1).as_matrix()
-    # y = data[TARGET_COLUMN].as_matrix()
-    # X_test = data_test.drop('Id', 1).as_matrix()
 
     return X, y, X_test
 
@@ -64,9 +51,6 @@ def create_model(
     model = Sequential()
 
     model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer=init_mode))
-    # model.add(Dense(512, activation=activation, kernel_initializer=init_mode))
-    # model.add(Dense(256, activation=activation, kernel_initializer=init_mode))
-    # model.add(Dense(128, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(64, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(1))
 
@@ -81,83 +65,21 @@ X, y, X_test = prepare_data()
 X_train = X
 y_train = y
 
-# print(X[:, 0])
-# print(y)
-# print('X shape: {}'.format(X.shape))
-# print('y shape: {}'.format(y.shape))
-# print('X_test shape: {}'.format(X_test.shape))
 n_input = X.shape[1]
 
-# x_scaler = preprocessing.MinMaxScaler()
-# y_scaler = preprocessing.MinMaxScaler()
-#
-# X_scaled = x_scaler.fit_transform(X)
-# y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
-#
-# X_train = X_scaled
-# y_train = y_scaled
+x_scaler = preprocessing.MinMaxScaler()
+X_scaled = x_scaler.fit_transform(X)
+X_test = x_scaler.fit_transform(X_test)
+X_train = X_scaled
 
 
-# print('X_train: {}'.format(X_train.shape))
-# print('X_test: {}'.format(X_test.shape))
-# print('y_train: {}'.format(y_train.shape))
-# print('y_test: {}'.format(y_test.shape))
-
-nb_epoch = 5000
-# model = create_model(n_epochs)
+nb_epoch = 500
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=5, verbose=1)
-model.fit(X, y)
+model.fit(X_train, y)
 
-# GridSearchCV
-# model = KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=1000, batch_size=50, verbose=0)
-# param_grid = {
-#
-# }
-# grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, scoring='neg_mean_squared_error')
-# grid_result = grid.fit(X, y)
-
-# print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
-#
-# means = grid_result.cv_results_['mean_test_score']
-# stds = grid_result.cv_results_['std_test_score']
-# params = grid_result.cv_results_['params']
-#
-# for mean, stdev, param in zip(means, stds, params):
-#     print("%f (%f) with: %r" % (mean, stdev, param))
-
-# cross validation
-# seed = 7
-# np.random.seed(seed)
-# estimators = []
-# estimators.append(('standardize', StandardScaler()))
-# estimators.append(('mlp', KerasRegressor(build_fn=create_model, n_input=n_input, nb_epoch=10000, batch_size=50, verbose=1)))
-# pipeline = Pipeline(estimators)
-
-# kfold = KFold(n_splits=10, random_state=seed)
-# results = cross_val_score(pipeline, X, y, cv=kfold)
-# print("Results: %.2f (%.2f) MSE" % (results.mean(), results.std()))
-
-# predicted = model.predict(X_test)
-
-# pyplot.plot(y_scaler.inverse_transform(predicted), color="blue")
-# pyplot.plot(y_scaler.inverse_transform(y_test), color="green")
-# pyplot.show()
-
-
-
-# X_test_scaled = x_scaler.fit_transform(X_test)
-# print(X_test_scaled.shape)
-#
 y_pred = model.predict(X_test)
-# y_pred = y_scaler.inverse_transform(y_pred)
-# print(y_pred.shape)
-# print(y_pred)
-
-file = open('submission.csv', 'w')
-header = "Id,SalePrice\n"
-file.write(header)
-# print(data_test['Id'])
-# print(y_pred)
+writer = csv.writer(open('submission.csv', 'w'))
+writer.writerow(['Id', 'SalePrice'])
 for id, y in zip(data_test['Id'], y_pred):
-    file.write('{},{}\n'.format(id, y))
+    writer.writerow([id, y])
