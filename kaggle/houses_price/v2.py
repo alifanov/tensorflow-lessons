@@ -45,9 +45,9 @@ def prepare_data():
 
     data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
 
-    X = data.iloc[:, 1:80]
-    y = data.iloc[:, 80].reshape(-1, 1)
-    X_test = data_test.iloc[:, 1:]
+    X = data.values[:, 1:80]
+    y = data.values[:, 80]
+    X_test = data_test.values[:, 1:]
     # X = data.drop(TARGET_COLUMN, 1)
     # X = X.drop('Id', 1).as_matrix()
     # y = data[TARGET_COLUMN].as_matrix()
@@ -67,9 +67,10 @@ def create_model(
     # model.add(Dense(512, activation=activation, kernel_initializer=init_mode))
     # model.add(Dense(256, activation=activation, kernel_initializer=init_mode))
     # model.add(Dense(128, activation=activation, kernel_initializer=init_mode))
+    model.add(Dense(64, activation=activation, kernel_initializer=init_mode))
     model.add(Dense(1))
 
-    learning_rate = 1
+    learning_rate = 1e-2
     decay = learning_rate / 1000
 
     model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
@@ -77,20 +78,24 @@ def create_model(
 
 
 X, y, X_test = prepare_data()
+X_train = X
+y_train = y
 
-print('X shape: {}'.format(X.shape))
-print('y shape: {}'.format(y.shape))
-print('X_test shape: {}'.format(X_test.shape))
+# print(X[:, 0])
+# print(y)
+# print('X shape: {}'.format(X.shape))
+# print('y shape: {}'.format(y.shape))
+# print('X_test shape: {}'.format(X_test.shape))
 n_input = X.shape[1]
 
-x_scaler = preprocessing.MinMaxScaler()
-y_scaler = preprocessing.MinMaxScaler()
-
-X_scaled = x_scaler.fit_transform(X)
-y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
-
-X_train = X_scaled
-y_train = y_scaled
+# x_scaler = preprocessing.MinMaxScaler()
+# y_scaler = preprocessing.MinMaxScaler()
+#
+# X_scaled = x_scaler.fit_transform(X)
+# y_scaled = y_scaler.fit_transform(y.reshape(-1, 1))
+#
+# X_train = X_scaled
+# y_train = y_scaled
 
 
 # print('X_train: {}'.format(X_train.shape))
@@ -98,10 +103,10 @@ y_train = y_scaled
 # print('y_train: {}'.format(y_train.shape))
 # print('y_test: {}'.format(y_test.shape))
 
-nb_epoch = 100
+nb_epoch = 500
 # model = create_model(n_epochs)
 np.random.seed(3)
-model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=10, verbose=1)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=5, verbose=1)
 model.fit(X, y)
 
 # GridSearchCV
@@ -141,17 +146,18 @@ model.fit(X, y)
 
 
 
-X_test_scaled = x_scaler.fit_transform(X_test)
+# X_test_scaled = x_scaler.fit_transform(X_test)
 # print(X_test_scaled.shape)
 #
-y_pred = model.predict(X_test_scaled)
-y_pred = y_scaler.inverse_transform(y_pred)
+y_pred = model.predict(X_test)
+# y_pred = y_scaler.inverse_transform(y_pred)
 # print(y_pred.shape)
+# print(y_pred)
 
 file = open('submission.csv', 'w')
 header = "Id,SalePrice\n"
 file.write(header)
-print(data_test['Id'])
-print(y_pred)
-for id, y in zip(data_test['Id'], y_pred.reshape(-1, 1)):
+# print(data_test['Id'])
+# print(y_pred)
+for id, y in zip(data_test['Id'], y_pred):
     file.write('{},{}\n'.format(id, y))
