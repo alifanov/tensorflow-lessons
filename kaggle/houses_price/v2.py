@@ -73,7 +73,7 @@ n_input = X.shape[1]
 # X_train = X_scaled
 
 
-nb_epoch = 500
+nb_epoch = 5000
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=5, verbose=1)
 model.fit(X_train, y)
