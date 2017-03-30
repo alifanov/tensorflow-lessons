@@ -4,6 +4,8 @@ import numpy as np
 import seaborn as sns
 
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 from keras.wrappers.scikit_learn import KerasRegressor
 from keras.layers import Dense
 from keras.models import Sequential
@@ -61,9 +63,10 @@ def create_model(
     return model
 
 
-X, y, X_test = prepare_data()
-X_train = X
-y_train = y
+X, y, X_validation = prepare_data()
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+# X_train = X
+# y_train = y
 
 n_input = X.shape[1]
 
@@ -73,12 +76,17 @@ n_input = X.shape[1]
 # X_train = X_scaled
 
 
-nb_epoch = 5000
+nb_epoch = 1000
 np.random.seed(3)
-model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=5, verbose=1)
-model.fit(X_train, y)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=50, verbose=1)
+model.fit(X_train, y_train)
 
-y_pred = model.predict(X_test)
+y_test_pred = model.predict(X_test)
+rmse_test = mean_squared_error(y_test, y_test_pred)**0.5
+print()
+print('Test RMSE: {0:.4}'.format(rmse_test))
+
+y_pred = model.predict(X_validation)
 writer = csv.writer(open('submission.csv', 'w'))
 writer.writerow(['Id', 'SalePrice'])
 for id, y in zip(data_test['Id'], y_pred):
