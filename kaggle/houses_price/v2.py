@@ -12,6 +12,9 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
+EPOCHS = 300
+LR = 1e-2
+BATCH_SIZE = 50
 
 data_test = pd.read_csv('./test.csv')
 
@@ -47,17 +50,17 @@ def prepare_data():
 
 def create_model(
         n_input,
-        init_mode='uniform',
         activation='relu'
 ):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer=init_mode))
-    model.add(Dense(64, activation=activation, kernel_initializer=init_mode))
+    model.add(Dense(n_input, input_dim=n_input, activation=activation))
+    model.add(Dense(128, activation=activation))
+    model.add(Dense(64, activation=activation))
     model.add(Dense(1))
 
-    learning_rate = 1e-2
-    decay = learning_rate / 1000
+    learning_rate = LR
+    decay = learning_rate / EPOCHS
 
     model.compile(loss='mse', optimizer=Adam(lr=learning_rate, decay=decay))
     return model
@@ -76,9 +79,9 @@ n_input = X.shape[1]
 # X_train = X_scaled
 
 
-nb_epoch = 1000
+nb_epoch = EPOCHS
 np.random.seed(3)
-model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=50, verbose=1)
+model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
 model.fit(X_train, y_train)
 
 y_test_pred = model.predict(X_test)
@@ -86,8 +89,15 @@ rmse_test = mean_squared_error(y_test, y_test_pred)**0.5
 print()
 print('Test RMSE: {0:.4}'.format(rmse_test))
 
+config = 'bs_{}-lr_{}-e_{}-rmse_{:.2f}'.format(
+    BATCH_SIZE,
+    LR,
+    EPOCHS,
+    rmse_test
+)
+
 y_pred = model.predict(X_validation)
-writer = csv.writer(open('submission.csv', 'w'))
+writer = csv.writer(open('submission.{}.csv'.format(config), 'w'))
 writer.writerow(['Id', 'SalePrice'])
 for id, y in zip(data_test['Id'], y_pred):
     writer.writerow([id, y])
