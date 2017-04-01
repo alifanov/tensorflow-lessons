@@ -28,7 +28,7 @@ def prepare_data():
 
     for col in categorical_fields:
         data[col].fillna('default', inplace=True)
-        data_test[col].fillna('dwfault', inplace=True)
+        data_test[col].fillna('default', inplace=True)
 
     for col in num_fields:
         data[col].fillna(0, inplace=True)
@@ -45,7 +45,6 @@ def prepare_data():
     y = data.values[:, -1]
 
     X_test = data_test.values[:, 1:]
-
 
     return X, y, X_test
 
@@ -89,13 +88,13 @@ np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
 history = model.fit(X, y, validation_split=0.33)
 
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.title('model loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 rmse_test = np.mean(history.history['val_loss'])
 print()
