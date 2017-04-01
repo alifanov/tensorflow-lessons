@@ -27,8 +27,8 @@ def prepare_data():
     num_fields = data.select_dtypes(include=[np.number]).drop(TARGET_COLUMN, 1).columns
 
     for col in categorical_fields:
-        data[col].fillna(data[col].mode()[0], inplace=True)
-        data_test[col].fillna(data_test[col].mode()[0], inplace=True)
+        data[col].fillna('default', inplace=True)
+        data_test[col].fillna('dwfault', inplace=True)
 
     for col in num_fields:
         data[col].fillna(0, inplace=True)
@@ -41,17 +41,9 @@ def prepare_data():
 
     data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
 
-    data.drop(['Utilities', 'RoofMatl', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'Heating', 'LowQualFinSF',
-               'BsmtFullBath', 'BsmtHalfBath', 'Functional', 'GarageYrBlt', 'GarageArea', 'GarageCond', 'WoodDeckSF',
-               'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC', 'Fence', 'MiscFeature', 'MiscVal'],
-              axis=1, inplace=True)
     X = data.values[:, 1:-1]
     y = data.values[:, -1]
 
-    data_test.drop(['Utilities', 'RoofMatl', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'Heating', 'LowQualFinSF',
-               'BsmtFullBath', 'BsmtHalfBath', 'Functional', 'GarageYrBlt', 'GarageArea', 'GarageCond', 'WoodDeckSF',
-               'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC', 'Fence', 'MiscFeature', 'MiscVal'],
-              axis=1, inplace=True)
     X_test = data_test.values[:, 1:]
 
 
@@ -119,7 +111,7 @@ config = 'bs_{}-lr_{}-e_{}-rmse_{:.2f}'.format(
 repo = Repo('../..')
 git = repo.git
 git.commit('.', m='new attempt: {}'.format(config))
-config += '.{}'.format(repo.commit().hexsha)
+config += '.hash-{}'.format(repo.commit().hexsha)
 
 y_pred = model.predict(X_validation)
 writer = csv.writer(open('submission.{}.csv'.format(config), 'w'))
