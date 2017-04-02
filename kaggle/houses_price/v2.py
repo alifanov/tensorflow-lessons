@@ -12,7 +12,7 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
-EPOCHS = 700
+EPOCHS = 500
 LR = 1e-3
 BATCH_SIZE = 100
 
@@ -89,13 +89,13 @@ np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
 history = model.fit(X, y, validation_split=0.33)
 
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.title('model loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 rmse_test = history.history['val_loss'][-1]
 print()
