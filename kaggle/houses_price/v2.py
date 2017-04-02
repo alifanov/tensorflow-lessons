@@ -1,5 +1,4 @@
 import csv
-import math
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -11,22 +10,13 @@ from keras.wrappers.scikit_learn import KerasRegressor
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.optimizers import Adam
-from keras.callbacks import LearningRateScheduler
 
 TARGET_COLUMN = 'SalePrice'
-EPOCHS = 500
+EPOCHS = 700
 LR = 1e-3
-BATCH_SIZE = 50
+BATCH_SIZE = 100
 
 data_test = pd.read_csv('./test.csv')
-
-
-def step_decay(epoch):
-    initial_lrate = 1e-2
-    drop = 0.25
-    epochs_drop = 50.0
-    lrate = initial_lrate * math.pow(drop, math.floor((1 + epoch) / epochs_drop))
-    return lrate
 
 
 def prepare_data():
@@ -49,8 +39,8 @@ def prepare_data():
         data[col] = encode.fit_transform(data[col])
         data_test[col] = encode.fit_transform(data_test[col])
 
-    data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
-    # data.dropna(subset=[TARGET_COLUMN], inplace=True)
+    # data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
+    data.dropna(subset=[TARGET_COLUMN], inplace=True)
 
     X = data.values[:, 1:-1]
     y = data.values[:, -1]
@@ -71,11 +61,11 @@ def create_model(
     # model.add(Dropout(dropout))
     model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    model.add(Dense(256, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    model.add(Dense(128, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    model.add(Dense(64, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
     # model.add(Dense(32, activation=activation))
     # model.add(Dropout(dropout))
@@ -84,9 +74,9 @@ def create_model(
     model.add(Dense(1, activation=activation, kernel_initializer='uniform'))
 
     learning_rate = LR
-    # decay = learning_rate / EPOCHS
+    decay = learning_rate / EPOCHS
 
-    model.compile(loss='mse', optimizer=Adam(lr=LR))
+    model.compile(loss='mse', optimizer=Adam(lr=LR, decay=decay))
     return model
 
 
@@ -97,17 +87,15 @@ n_input = X.shape[1]
 nb_epoch = EPOCHS
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
-lrate = LearningRateScheduler(step_decay)
-callbacks_list = [lrate]
-history = model.fit(X, y, validation_split=0.2, callbacks=callbacks_list)
+history = model.fit(X, y, validation_split=0.33)
 
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+# plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+# plt.title('model loss')
+# plt.ylabel('loss')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'test'], loc='upper left')
+# plt.show()
 
 rmse_test = history.history['val_loss'][-1]
 print()

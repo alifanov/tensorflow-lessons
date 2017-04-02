@@ -1,5 +1,11 @@
 # Experiment plan
 
+## Small test dataset
+
+Action: Use small test dataset (0.1)
+
+Result:
+
 ## Add learning rate scheduler
 
 Action: Use LearninRateScheduler
