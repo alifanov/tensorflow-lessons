@@ -16,14 +16,14 @@ from keras.callbacks import LearningRateScheduler
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 500
 LR = 1e-3
-BATCH_SIZE = 100
+BATCH_SIZE = 50
 
 data_test = pd.read_csv('./test.csv')
 
 
 def step_decay(epoch):
-    initial_lrate = 1e-3
-    drop = 0.5
+    initial_lrate = 1e-2
+    drop = 0.25
     epochs_drop = 50.0
     lrate = initial_lrate * math.pow(drop, math.floor((1 + epoch) / epochs_drop))
     return lrate
