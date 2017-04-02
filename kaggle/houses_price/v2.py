@@ -59,7 +59,7 @@ def create_model(
 
     model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
     model.add(Dense(256, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
