@@ -73,10 +73,10 @@ def create_model(
     # model.add(Dropout(dropout))
     model.add(Dense(1, activation=activation, kernel_initializer='uniform'))
 
-    learning_rate = LR
-    decay = learning_rate / EPOCHS
+    # learning_rate = LR
+    # decay = learning_rate / EPOCHS
 
-    model.compile(loss='mse', optimizer=Adam(lr=LR, decay=decay))
+    model.compile(loss='mse', optimizer=Adam(lr=LR))
     return model
 
 
