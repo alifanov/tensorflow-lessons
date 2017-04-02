@@ -1,5 +1,17 @@
 # Experiment plan
 
+## Reduce columns
+
+Action: Check correlation and choose only that high correlate
+
+Result:
+
+## Add columns/features
+
+Action: Square, log of some features
+
+Result:
+
 ## Small test dataset
 
 Action: Use small test dataset (0.1)
