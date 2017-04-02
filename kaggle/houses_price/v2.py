@@ -12,7 +12,7 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
-EPOCHS = 700
+EPOCHS = 1000
 LR = 1e-3
 BATCH_SIZE = 100
 
