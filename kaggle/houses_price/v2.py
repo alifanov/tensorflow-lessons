@@ -31,8 +31,8 @@ def prepare_data():
         data_test[col].fillna('default', inplace=True)
 
     for col in num_fields:
-        data[col].fillna(data[col].mean(), inplace=True)
-        data_test[col].fillna(data_test[col].mean(), inplace=True)
+        data[col].fillna(0, inplace=True)
+        data_test[col].fillna(0, inplace=True)
 
     encode = preprocessing.LabelEncoder()
     for col in categorical_fields:
