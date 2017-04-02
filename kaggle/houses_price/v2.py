@@ -12,7 +12,7 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
-EPOCHS = 1000
+EPOCHS = 700
 LR = 1e-3
 BATCH_SIZE = 100
 
@@ -39,7 +39,8 @@ def prepare_data():
         data[col] = encode.fit_transform(data[col])
         data_test[col] = encode.fit_transform(data_test[col])
 
-    data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
+    # data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
+    data.dropna(subset=[TARGET_COLUMN], inplace=True)
 
     X = data.values[:, 1:-1]
     y = data.values[:, -1]
