@@ -10,9 +10,10 @@ from keras.wrappers.scikit_learn import KerasRegressor
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.optimizers import Adam
+np.random.seed(3)
 
 TARGET_COLUMN = 'SalePrice'
-EPOCHS = 500
+EPOCHS = 700
 LR = 1e-3
 BATCH_SIZE = 100
 
@@ -85,7 +86,6 @@ X, y, X_validation = prepare_data()
 n_input = X.shape[1]
 
 nb_epoch = EPOCHS
-np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
 history = model.fit(X, y, validation_split=0.2)
 
