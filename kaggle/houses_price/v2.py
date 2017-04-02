@@ -93,6 +93,8 @@ def create_model(
 X, y, X_validation = prepare_data()
 
 n_input = X.shape[1]
+print(X.shape)
+print(y.shape)
 
 nb_epoch = EPOCHS
 np.random.seed(3)
