@@ -1,5 +1,11 @@
 # Experiment plan
 
+## Add learning rate scheduler
+
+Action: Use LearninRateScheduler
+
+Result:
+
 ## Less layers
 
 Action: Remove layers to Sequence

@@ -1,4 +1,5 @@
 import csv
+import math
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -10,6 +11,7 @@ from keras.wrappers.scikit_learn import KerasRegressor
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.optimizers import Adam
+from keras.callbacks import LearningRateScheduler
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 500
@@ -17,6 +19,14 @@ LR = 1e-3
 BATCH_SIZE = 100
 
 data_test = pd.read_csv('./test.csv')
+
+
+def step_decay(epoch):
+    initial_lrate = 1e-2
+    drop = 0.5
+    epochs_drop = 50.0
+    lrate = initial_lrate * math.pow(drop, math.floor((1 + epoch) / epochs_drop))
+    return lrate
 
 
 def prepare_data():
@@ -61,11 +71,11 @@ def create_model(
     # model.add(Dropout(dropout))
     model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
     # model.add(Dense(32, activation=activation))
     # model.add(Dropout(dropout))
@@ -87,7 +97,9 @@ n_input = X.shape[1]
 nb_epoch = EPOCHS
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
-history = model.fit(X, y, validation_split=0.33)
+lrate = LearningRateScheduler(step_decay)
+callbacks_list = [lrate]
+history = model.fit(X, y, validation_split=0.33, callbacks=callbacks_list)
 
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
