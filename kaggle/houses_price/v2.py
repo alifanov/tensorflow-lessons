@@ -67,9 +67,9 @@ def create_model(
 ):
     model = Sequential()
 
-    model.add(Dense(32, input_dim=n_input, activation=activation, kernel_initializer='uniform'))
+    model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
     # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
@@ -93,23 +93,21 @@ def create_model(
 X, y, X_validation = prepare_data()
 
 n_input = X.shape[1]
-print(X.shape)
-print(y.shape)
 
 nb_epoch = EPOCHS
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
 lrate = LearningRateScheduler(step_decay)
 callbacks_list = [lrate]
-history = model.fit(X, y, validation_split=0.33, callbacks=callbacks_list)
+history = model.fit(X, y, validation_split=0.2, callbacks=callbacks_list)
 
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.title('model loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 rmse_test = history.history['val_loss'][-1]
 print()
