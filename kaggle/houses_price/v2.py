@@ -57,11 +57,11 @@ def create_model(
 ):
     model = Sequential()
 
-    model.add(Dense(n_input, input_dim=n_input, activation=activation))
+    model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    # model.add(Dense(512, activation=activation))
+    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    model.add(Dense(256, activation=activation))
+    model.add(Dense(256, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
     # model.add(Dense(128, activation=activation))
     # model.add(Dropout(dropout))
@@ -71,7 +71,7 @@ def create_model(
     # model.add(Dropout(dropout))
     # model.add(Dense(16, activation=activation))
     # model.add(Dropout(dropout))
-    model.add(Dense(1, activation=activation))
+    model.add(Dense(1, activation=activation, kernel_initializer='uniform'))
 
     learning_rate = LR
     decay = learning_rate / EPOCHS
