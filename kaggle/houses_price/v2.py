@@ -26,18 +26,19 @@ def prepare_data():
 
     num_fields = data.select_dtypes(include=[np.number]).drop(TARGET_COLUMN, 1).columns
 
-    for col in categorical_fields:
-        data[col].fillna('default', inplace=True)
-        data_test[col].fillna('default', inplace=True)
-
     for col in num_fields:
         data[col].fillna(0, inplace=True)
         data_test[col].fillna(0, inplace=True)
 
-    encode = preprocessing.LabelEncoder()
-    for col in categorical_fields:
-        data[col] = encode.fit_transform(data[col])
-        data_test[col] = encode.fit_transform(data_test[col])
+    data.drop(categorical_fields, axis=1, inplace=True)
+    # for col in categorical_fields:
+        # data[col].fillna('default', inplace=True)
+        # data_test[col].fillna('default', inplace=True)
+
+    # encode = preprocessing.LabelEncoder()
+    # for col in categorical_fields:
+    #     data[col] = encode.fit_transform(data[col])
+    #     data_test[col] = encode.fit_transform(data_test[col])
 
     # data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
     data.dropna(subset=[TARGET_COLUMN], inplace=True)
@@ -59,7 +60,7 @@ def create_model(
 
     model.add(Dense(n_input, input_dim=n_input, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
-    model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
+    # model.add(Dense(512, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
     model.add(Dense(256, activation=activation, kernel_initializer='uniform'))
     # model.add(Dropout(dropout))
