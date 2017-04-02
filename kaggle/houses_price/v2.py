@@ -40,8 +40,8 @@ def prepare_data():
     #     data[col] = encode.fit_transform(data[col])
     #     data_test[col] = encode.fit_transform(data_test[col])
 
-    # data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
-    data.dropna(subset=[TARGET_COLUMN], inplace=True)
+    data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
+    # data.dropna(subset=[TARGET_COLUMN], inplace=True)
 
     X = data.values[:, 1:-1]
     y = data.values[:, -1]
@@ -74,10 +74,10 @@ def create_model(
     # model.add(Dropout(dropout))
     model.add(Dense(1, activation=activation, kernel_initializer='uniform'))
 
-    # learning_rate = LR
-    # decay = learning_rate / EPOCHS
+    learning_rate = LR
+    decay = learning_rate / EPOCHS
 
-    model.compile(loss='mse', optimizer=Adam(lr=LR))
+    model.compile(loss='mse', optimizer=Adam(lr=LR, decay=decay))
     return model
 
 
