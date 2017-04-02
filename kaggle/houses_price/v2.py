@@ -30,15 +30,14 @@ def prepare_data():
         data[col].fillna(0, inplace=True)
         data_test[col].fillna(0, inplace=True)
 
-    data.drop(categorical_fields, axis=1, inplace=True)
-    # for col in categorical_fields:
-        # data[col].fillna('default', inplace=True)
-        # data_test[col].fillna('default', inplace=True)
+    for col in categorical_fields:
+        data[col].fillna('default', inplace=True)
+        data_test[col].fillna('default', inplace=True)
 
-    # encode = preprocessing.LabelEncoder()
-    # for col in categorical_fields:
-    #     data[col] = encode.fit_transform(data[col])
-    #     data_test[col] = encode.fit_transform(data_test[col])
+    encode = preprocessing.LabelEncoder()
+    for col in categorical_fields:
+        data[col] = encode.fit_transform(data[col])
+        data_test[col] = encode.fit_transform(data_test[col])
 
     # data[TARGET_COLUMN].fillna(data[TARGET_COLUMN].mean(), inplace=True)
     data.dropna(subset=[TARGET_COLUMN], inplace=True)
