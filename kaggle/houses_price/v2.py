@@ -15,7 +15,7 @@ np.random.seed(3)
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 700
-LR = 1e-2
+LR = 1e-3
 BATCH_SIZE = 100
 
 
