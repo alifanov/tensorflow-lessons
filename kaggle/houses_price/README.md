@@ -53,3 +53,16 @@ Result:
 Action: Use MinMaxScaler
 
 Result:
+
+
+## Scale Y
+
+Action: Use StandardScaler
+
+Result:
+
+## scale X
+
+Action: Use StandardScaler
+
+Result:
