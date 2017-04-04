@@ -14,7 +14,7 @@ from keras.optimizers import Adam
 np.random.seed(3)
 
 TARGET_COLUMN = 'SalePrice'
-EPOCHS = 1000
+EPOCHS = 2000
 LR = 1e-5
 BATCH_SIZE = 100
 
