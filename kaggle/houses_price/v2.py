@@ -19,7 +19,6 @@ LR = 1e-5
 BATCH_SIZE = 50
 
 
-
 def prepare_data():
     data = pd.read_csv('./train.csv')
     data_test = pd.read_csv('./test.csv')
@@ -48,11 +47,11 @@ def prepare_data():
     corr = data.corr()
     corr.sort_values([TARGET_COLUMN], ascending=False, inplace=True)
     columns = ['Id', 'OverallQual', 'GrLivArea', 'GarageCars', 'GarageArea',
-       'TotalBsmtSF', '1stFlrSF', 'FullBath', 'TotRmsAbvGrd', 'YearBuilt',
-       'YearRemodAdd', 'MasVnrArea', 'GarageYrBlt', 'Fireplaces', 'BsmtFinSF1',
-       'Foundation', 'LotFrontage', 'WoodDeckSF', '2ndFlrSF', 'OpenPorchSF',
-       'GarageType', 'HeatingQC', 'GarageFinish', 'KitchenQual', 'BsmtQual',
-       'ExterQual', 'SalePrice'][1:]
+               'TotalBsmtSF', '1stFlrSF', 'FullBath', 'TotRmsAbvGrd', 'YearBuilt',
+               'YearRemodAdd', 'MasVnrArea', 'GarageYrBlt', 'Fireplaces', 'BsmtFinSF1',
+               'Foundation', 'LotFrontage', 'WoodDeckSF', '2ndFlrSF', 'OpenPorchSF',
+               'GarageType', 'HeatingQC', 'GarageFinish', 'KitchenQual', 'BsmtQual',
+               'ExterQual', 'SalePrice'][1:]
     data = data[columns]
 
     X = data.values[:, :-1]
