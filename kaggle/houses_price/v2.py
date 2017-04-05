@@ -13,7 +13,7 @@ from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 700
-LR = 1e-3
+LR = 1e-8
 BATCH_SIZE = 100
 
 data_test = pd.read_csv('./test.csv')
@@ -82,8 +82,8 @@ def create_model(
 
 X, y, X_validation = prepare_data()
 
-X = preprocessing.MinMaxScaler().fit_transform(X)
-X_validation = preprocessing.MinMaxScaler().fit_transform(X_validation)
+scaler = preprocessing.MinMaxScaler().fit(y)
+y = scaler.transform(y)
 
 n_input = X.shape[1]
 
@@ -117,6 +117,7 @@ git.commit('.', m='new attempt: {}'.format(config))
 config += '.hash-{}'.format(repo.commit().hexsha)
 
 y_pred = model.predict(X_validation)
+y_pred = scaler.inverse_transform(y_pred)
 writer = csv.writer(open('submission.{}.csv'.format(config), 'w'))
 writer.writerow(['Id', 'SalePrice'])
 for id, y in zip(data_test['Id'], y_pred):

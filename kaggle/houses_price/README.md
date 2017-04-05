@@ -54,7 +54,7 @@ Result:
 
 Action: Use MinMaxScaler
 
-Result:
+Result: Bad (0.2617)
 
 
 ## Scale Y
