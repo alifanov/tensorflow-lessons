@@ -13,7 +13,7 @@ from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 700
-LR = 1e-8
+LR = 1e-7
 BATCH_SIZE = 100
 
 data_test = pd.read_csv('./test.csv')
