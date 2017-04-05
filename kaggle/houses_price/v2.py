@@ -13,7 +13,7 @@ from keras.optimizers import Adam
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 700
-LR = 1e-7
+LR = 1e-3
 BATCH_SIZE = 100
 
 data_test = pd.read_csv('./test.csv')
@@ -82,15 +82,12 @@ def create_model(
 
 X, y, X_validation = prepare_data()
 
-scaler = preprocessing.StandardScaler().fit(y)
-y = scaler.transform(y)
-
 n_input = X.shape[1]
 
 nb_epoch = EPOCHS
 np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
-history = model.fit(X, y, validation_split=0.33)
+history = model.fit(X, y, validation_split=0.1)
 
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
@@ -117,7 +114,6 @@ git.commit('.', m='new attempt: {}'.format(config))
 config += '.hash-{}'.format(repo.commit().hexsha)
 
 y_pred = model.predict(X_validation)
-y_pred = scaler.inverse_transform(y_pred)
 writer = csv.writer(open('submission.{}.csv'.format(config), 'w'))
 writer.writerow(['Id', 'SalePrice'])
 for id, y in zip(data_test['Id'], y_pred):

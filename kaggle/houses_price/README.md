@@ -44,6 +44,8 @@ Action: Add layers to Sequence
 
 Result:
 
+--------------------------------------------------------------------------
+
 ## Scale Y
 
 Action: Use MinMaxScaler
@@ -61,7 +63,7 @@ Result: Bad (0.2617)
 
 Action: Use StandardScaler
 
-Result:
+Result: Bad (0.43)
 
 ## scale X
 
