@@ -10,11 +10,10 @@ from keras.wrappers.scikit_learn import KerasRegressor
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.optimizers import Adam
-from sklearn.feature_selection import VarianceThreshold
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 700
-LR = 1e-3
+LR = 1e-1
 BATCH_SIZE = 100
 
 data_test = pd.read_csv('./test.csv')
@@ -47,9 +46,6 @@ def prepare_data():
     y = data.values[:, -1]
 
     X_test = data_test.values[:, 1:]
-
-    X = VarianceThreshold(.9).fit_transform(X)
-    X_test = VarianceThreshold(.9).fit_transform(X_test)
 
     return X, y, X_test
 
@@ -85,6 +81,9 @@ def create_model(
 
 
 X, y, X_validation = prepare_data()
+
+X = preprocessing.StandardScaler().fit_transform(X)
+X_validation = preprocessing.StandardScaler().fit_transform(X_validation)
 
 n_input = X.shape[1]
 
