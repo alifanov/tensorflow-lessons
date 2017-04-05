@@ -48,7 +48,7 @@ Result:
 
 Action: Use MinMaxScaler
 
-Result:
+Result: Very bad (1.6)
 
 ## scale X
 
