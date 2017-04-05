@@ -10,6 +10,7 @@ from keras.wrappers.scikit_learn import KerasRegressor
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.optimizers import Adam
+from sklearn.feature_selection import VarianceThreshold
 
 TARGET_COLUMN = 'SalePrice'
 EPOCHS = 700
@@ -46,6 +47,9 @@ def prepare_data():
     y = data.values[:, -1]
 
     X_test = data_test.values[:, 1:]
+
+    X = VarianceThreshold(.9).fit_transform(X)
+    X_test = VarianceThreshold(.9).fit_transform(X_test)
 
     return X, y, X_test
 
@@ -89,13 +93,13 @@ np.random.seed(3)
 model = KerasRegressor(build_fn=create_model, n_input=n_input, epochs=nb_epoch, batch_size=BATCH_SIZE, verbose=1)
 history = model.fit(X, y, validation_split=0.33)
 
-# plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-# plt.title('model loss')
-# plt.ylabel('loss')
-# plt.xlabel('epoch')
-# plt.legend(['train', 'test'], loc='upper left')
-# plt.show()
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 rmse_test = history.history['val_loss'][-1]
 print()
