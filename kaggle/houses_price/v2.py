@@ -82,8 +82,8 @@ def create_model(
 
 X, y, X_validation = prepare_data()
 
-X = preprocessing.StandardScaler().fit_transform(X)
-X_validation = preprocessing.StandardScaler().fit_transform(X_validation)
+X = preprocessing.MinMaxScaler().fit_transform(X)
+X_validation = preprocessing.MinMaxScaler().fit_transform(X_validation)
 
 n_input = X.shape[1]
 

@@ -1,5 +1,7 @@
 # Experiment plan
 
+# Best: 0.1639
+
 ## Reduce columns
 
 Action: Check correlation and choose only that high correlate
@@ -65,4 +67,4 @@ Result:
 
 Action: Use StandardScaler
 
-Result:
+Result: Bad (0.2156)
