@@ -1,0 +1,11 @@
+matplotlib
+tensorflow
+sklearn
+scipy
+prettytensor
+pandas
+jupyter
+seaborn
+keras
+gitpython
+gym

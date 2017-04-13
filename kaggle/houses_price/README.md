@@ -14,12 +14,6 @@ Action: Square, log of some features
 
 Result:
 
-## Small test dataset
-
-Action: Use small test dataset (0.1)
-
-Result:
-
 ## Add learning rate scheduler
 
 Action: Use LearninRateScheduler
@@ -45,6 +39,12 @@ Action: Add layers to Sequence
 Result:
 
 --------------------------------------------------------------------------
+
+## Small test dataset
+
+Action: Use small test dataset (0.1)
+
+Result: Bad (0.1717)
 
 ## Scale Y
 
